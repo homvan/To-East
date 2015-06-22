@@ -1,0 +1,157 @@
+using UnityEngine;
+using System.Collections;
+
+public class BodyCheck : MonoBehaviour {
+    GameObject part, body;
+    public bool check_body,check_qiuqian,lev8set;
+    public bool rotated,check_wan_1,readd,readd_13;
+  
+    private Vector3 pos1,pos2,eggpos,eggpos2,qiuqian_pos;
+    GameObject player,egg,egg2;
+	// Use this for initialization
+	void Start () {
+        player = GameObject.FindWithTag("player");
+        egg = GameObject.FindWithTag("egg");
+        part = GameObject.Find("part");
+        body = part.transform.Find("Body").gameObject;
+        egg2 = GameObject.FindWithTag("egg2");
+        check_body = false;
+        rotated = false;
+        pos1.x = -113.3431f;
+        pos1.y = 16.72416f;
+        pos1.z = -11.13037f;
+        pos2.x = -97.975f;
+        pos2.y = 16.72416f;
+        pos2.z = -11.13037f;
+        eggpos.x = -72.06512f;
+        eggpos.y = -2.489826f;
+        eggpos.z = -11.13037f;
+        eggpos2.x = -37.58683f;
+        eggpos2.y = -0.06859908f;
+        eggpos2.z = -11.13037f;
+        qiuqian_pos.x = 20.17317f;
+        qiuqian_pos.y = -9.265312f;
+        qiuqian_pos.z = -11.13037f;
+        check_qiuqian = false;
+        check_wan_1 = false;
+        lev8set = false;
+        readd = false;
+        readd_13 = false;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+        if (player.GetComponent<RolerController2>().level == 0)
+        {
+            if ((transform.position.x > -115 && transform.position.x < -112) && (transform.position.y > 15 && transform.position.y < 18))
+            {
+                check_body = true;
+                if (!rotated)
+                {
+                    transform.Rotate(0, 0, -70);
+                    rotated = true;
+
+                }
+
+
+
+            }
+            else
+            {
+                if (rotated)
+                {
+                    transform.Rotate(0, 0, 70);
+                    rotated = false;
+                }
+            }
+            if (rotated)
+            {
+                transform.position = pos1;
+            }
+        }
+        else if (player.GetComponent<RolerController2>().level == 1)
+        {
+            if ((transform.position.x > -100 && transform.position.x < -96) && (transform.position.y > 14 && transform.position.y < 18))
+            {
+                check_body = true;
+                if (!rotated)
+                {
+                    transform.Rotate(0, 0, -70);
+                    rotated = true;
+
+                }
+
+
+
+            }
+            else
+            {
+                if (rotated)
+                {
+                    transform.Rotate(0, 0, 70);
+                    rotated = false;
+                }
+            }
+            if (rotated)
+            {
+                transform.position = pos2;
+            }
+        }
+        if (player.GetComponent<RolerController2>().level == 7 )
+        {
+            if (transform.position.x < -69 && transform.position.x > -73 && transform.position.y > -4.5 && transform.position.y < -0.5)
+            {
+                transform.position = eggpos;
+                check_wan_1 = true;
+            }
+            
+        }
+        if (player.GetComponent<RolerController2>().level == 12 && !egg2.GetComponent<eggroll2>().dir && egg2.transform.position.x > -34.6 )
+        {
+            if (transform.position.x > -39 && transform.position.x < -36 && transform.position.y > -2 && transform.position.y < 2)
+            {
+                transform.position = eggpos2;
+                player.GetComponent<RolerController2>().level = 13;
+            }
+        }
+
+
+        if (player.GetComponent<RolerController2>().level == 14)
+        {
+            if (transform.position.x > 19 && transform.position.x < 21 && transform.position.y > -10 && transform.position.y < -8)
+            {
+                transform.position = qiuqian_pos;
+                check_qiuqian = true;
+
+            }
+        }
+        if (check_wan_1 && !lev8set)
+        {
+            Destroy(body.GetComponent("DragMove2"));
+            body.renderer.material.color = Color.white;
+  
+
+        }
+        if (check_wan_1 && !player.GetComponent<Slice_2>().SliceState && !lev8set)
+        {
+            player.GetComponent<RolerController2>().level = 8;
+            lev8set = true;
+        }
+        if (player.GetComponent<RolerController2>().level >= 9 && !readd)
+        {
+            body.AddComponent("DragMove2");
+            readd = true;
+        }
+        if (player.GetComponent<RolerController2>().level == 13)
+        {
+            transform.position = eggpos2;
+            Destroy(body.GetComponent("DragMove2"));
+            body.renderer.material.color = Color.white;
+        }
+        if (player.GetComponent<RolerController2>().level >= 14 && !readd_13)
+        {
+            body.AddComponent("DragMove2");
+            readd_13 = true;
+        }
+	}
+}
