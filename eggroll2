@@ -1,0 +1,99 @@
+using UnityEngine;
+using System.Collections;
+
+public class eggroll2 : MonoBehaviour {
+    GameObject player,self,wan;
+    public bool dir;
+    private bool rebound,setkin,setkin2;
+    private int velocity;
+    private Vector2 reb_force;
+	// Use this for initialization
+	void Start () {
+        dir = true;
+        rebound = false;
+        velocity = 3;
+        player = GameObject.FindWithTag("player");
+        setkin = false; 
+        setkin2 = false;
+        self = GameObject.Find("egg2");
+        reb_force.x = 1;
+        reb_force.y = 1;
+        wan = GameObject.Find("wan2");
+	}
+	
+	// Update is called once per frame
+	void Update () {
+        
+        
+        if (player.GetComponent<RolerController2>().level == 9 && !setkin)
+        {
+            GetComponent<Rigidbody2D>().isKinematic = false;
+            setkin = true;
+        }
+        if (player.GetComponent<RolerController2>().level >= 9 && player.GetComponent<RolerController2>().level <14)
+        {
+           
+           
+            if (dir && !rebound)
+            {
+                GetComponent<Rigidbody2D>().gravityScale = 1;
+                if (transform.position.x >= -26.1)
+                {
+                    dir = false;
+                }
+            }
+            else if(dir && rebound){
+                if (transform.position.x < -26.9)
+                {
+                    transform.Translate(velocity * Time.deltaTime, 0, 0,Space.World);
+                }
+                else
+                {
+                    dir = false;
+                }
+            }
+            else if(!dir && !rebound)
+            {
+               if(transform.position.x <=-35.5){
+                   GetComponent<Rigidbody2D>().gravityScale = 1;
+               }
+               else if(transform.position.x <= -28.08)
+               {
+                   GetComponent<Rigidbody2D>().gravityScale = 0;
+               }
+               else
+               {
+                   GetComponent<Rigidbody2D>().gravityScale = 1;
+               }
+                if (transform.position.x <= -36.47)
+                {
+                    if (player.GetComponent<RolerController2>().level == 13)
+                    {
+                        rebound = true;
+                        GetComponent<Rigidbody2D>().velocity = reb_force * 5;
+                        wan.GetComponent<PolygonCollider2D>().isTrigger = true;
+                 
+                    }
+                    dir = true;
+                }
+                
+            }
+            else
+            {
+                if (transform.position.y < -5)
+                {
+                    player.GetComponent<RolerController2>().level = 14;
+                    
+                }
+                
+            }
+           
+        }
+        if (transform.position.y < -7.5 && !setkin2)
+        {
+            GetComponent<Rigidbody2D>().isKinematic = true;
+            setkin2 = true;
+        }
+       
+	}
+}
